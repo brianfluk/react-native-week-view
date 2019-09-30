@@ -135,7 +135,7 @@ export default class WeekView extends Component {
               {dates.map(date => (
                 <View
                   key={date}
-                  style={this.styles.dateViewStyle}
+                  style={{ flex: 1, width: SCREEN_WIDTH - 60 }}
                 >
                   <Events
                     key={dates}
