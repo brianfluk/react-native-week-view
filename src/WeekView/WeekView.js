@@ -24,6 +24,11 @@ export default class WeekView extends Component {
     this.calendar = null;
     setLocale(props.locale);
     this.times = this.generateTimes();
+    this.customStyles = this.props.customStyle ? this.props.customStyle : {};
+    this.styles = Object.keys(styles).reduce((total,curr) => ({
+      ...total, [curr]: {...styles[curr], ...this.customStyles[curr]}
+    }), {})
+    this.styles.eventStyle = this.customStyles.eventStyle ? this.customStyles.eventStyle : {}
   }
 
   componentDidMount() {
@@ -102,8 +107,8 @@ export default class WeekView extends Component {
     const { currentMoment } = this.state;
     const dates = this.prepareDates(currentMoment, numberOfDays);
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
+      <View style={this.styles.container}>
+        <View style={this.styles.header}>
           <Header
             style={headerStyle}
             formatDate={formatDateHeader}
@@ -112,11 +117,11 @@ export default class WeekView extends Component {
           />
         </View>
         <ScrollView>
-          <View style={styles.scrollViewContent}>
-            <View style={styles.timeColumn}>
+          <View style={this.styles.scrollViewContent}>
+            <View style={this.styles.timeColumn}>
               {this.times.map(time => (
-                <View key={time} style={styles.timeLabel}>
-                  <Text style={styles.timeText}>{time}</Text>
+                <View key={time} style={this.styles.timeLabel}>
+                  <Text style={this.styles.timeText}>{time}</Text>
                 </View>
               ))}
             </View>
@@ -130,7 +135,7 @@ export default class WeekView extends Component {
               {dates.map(date => (
                 <View
                   key={date}
-                  style={{ flex: 1, width: SCREEN_WIDTH - 60 }}
+                  style={this.styles.dateViewStyle}
                 >
                   <Events
                     key={dates}
@@ -139,6 +144,7 @@ export default class WeekView extends Component {
                     numberOfDays={numberOfDays}
                     onEventPress={onEventPress}
                     events={events}
+                    style={this.styles.eventStyle}
                   />
                 </View>
               ))}
@@ -158,6 +164,16 @@ WeekView.propTypes = {
   formatDateHeader: PropTypes.string,
   onEventPress: PropTypes.func,
   headerStyle: PropTypes.object,
+  customStyles: PropTypes.shape({
+    container: PropTypes.object,
+    scrollViewContent: PropTypes.object,
+    header: PropTypes.object,
+    timeColumn: PropTypes.object,
+    timeLabel: PropTypes.object,
+    timeText: PropTypes.object,
+    timeText: PropTypes.object,
+    eventStyle: PropTypes.object,
+  }),
   selectedDate: PropTypes.instanceOf(Date).isRequired,
   locale: PropTypes.string,
 };

@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     width: 60,
   },
+  dateViewStyle: {
+    flex: 1,
+    width: SCREEN_WIDTH - 60
+  }
 });
 
 export default styles;
