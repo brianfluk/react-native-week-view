@@ -24,11 +24,12 @@ export default class WeekView extends Component {
     this.calendar = null;
     setLocale(props.locale);
     this.times = this.generateTimes();
-    this.customStyles = this.props.customStyle ? this.props.customStyle : {};
+    this.customStyles = this.props.customStyles ? this.props.customStyles : {};
     this.styles = Object.keys(styles).reduce((total,curr) => ({
       ...total, [curr]: {...styles[curr], ...this.customStyles[curr]}
     }), {})
     this.styles.eventStyle = this.customStyles.eventStyle ? this.customStyles.eventStyle : {}
+    this.styles.viewCellStyle = this.customStyles.viewCellStyle ? this.customStyles.viewCellStyle : {}
   }
 
   componentDidMount() {
@@ -135,7 +136,7 @@ export default class WeekView extends Component {
               {dates.map(date => (
                 <View
                   key={date}
-                  style={{ flex: 1, width: SCREEN_WIDTH - 60 }}
+                  style={[{ flex: 1, width: SCREEN_WIDTH - 60 }, this.styles.viewCellStyle]}
                 >
                   <Events
                     key={dates}
@@ -173,6 +174,7 @@ WeekView.propTypes = {
     timeText: PropTypes.object,
     timeText: PropTypes.object,
     eventStyle: PropTypes.object,
+    viewCellStyle: PropTypes.object,
   }),
   selectedDate: PropTypes.instanceOf(Date).isRequired,
   locale: PropTypes.string,
